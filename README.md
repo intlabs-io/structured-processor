@@ -1,4 +1,4 @@
-# Lazy Lagoon Service
+# Structured Data Service, AKA "Lazy Lagoon"
 
 A Go-based service for processing CSV, JSON, JSONL, and SQL files with pagination and transformation capabilities.
 
