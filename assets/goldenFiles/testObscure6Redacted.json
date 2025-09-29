@@ -1,0 +1,26 @@
+{
+  "array": [
+      {
+          "test": "**redacted**",
+          "test2": "test2",
+          "test3": "test3"  
+      },
+      {
+          "test": "**redacted**",
+          "test2": "test2",
+          "test3": "test3" 
+      },
+      {
+          "test": "**redacted**",
+          "test2": "test2" 
+      },
+      {
+          "test": "test",
+          "test3": "test3" 
+      },
+      {
+          "test2": "test2",
+          "test3": "test3" 
+      }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York",
+  "roles": [
+    "admin",
+    "user",
+    "editor",
+    "guest",
+    "moderator"
+  ],
+  "friends": [
+    {
+      "name": "Alice",
+      "age": 28,
+      "contacts": [
+        "**redacted**",
+        "**redacted**"
+      ]
+    },
+    {
+      "name": "Bob",
+      "age": 32,
+      "contacts": [
+        "**redacted**",
+        "**redacted**"
+      ]
+    }
+  ]
+}

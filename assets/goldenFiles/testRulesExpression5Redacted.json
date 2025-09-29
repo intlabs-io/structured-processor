@@ -1,0 +1,42 @@
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York",
+  "roles": [
+    "**redacted**",
+    "user",
+    "editor",
+    "guest",
+    "moderator"
+  ],
+  "friends": [
+    {
+      "name": "Alice",
+      "age": 28,
+      "contacts": [
+        {
+          "type": "email",
+          "value": "alice@example.com"
+        },
+        {
+          "type": "phone",
+          "value": "123-456-7890"
+        }
+      ]
+    },
+    {
+      "name": "Bob",
+      "age": 32,
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "987-654-3210"
+        },
+        {
+          "type": "email",
+          "value": "bob@example.com"
+        }
+      ]
+    }
+  ]
+}

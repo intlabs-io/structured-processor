@@ -1,0 +1,15 @@
+FROM golang:1.23
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go install github.com/cosmtrek/air@v1.43.0
+# RUN CGO_ENABLED=0 go install -ldflags "-s -w -extldflags '-static'" github.com/go-delve/delve/cmd/dlv@latest
+RUN go mod download
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["air", "-c", "air.toml"]

@@ -1,0 +1,14 @@
+[
+  "**redacted**",
+  false,
+  true,
+  null,
+  "test",
+  {
+    "name": "John",
+    "array": [
+      "test",
+      "test2"
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York",
+  "roles": [
+    "admin",
+    "user",
+    "editor",
+    "guest",
+    "moderator"
+  ],
+  "friends": [
+    {
+      "name": "Alice",
+      "age": 28,
+      "contacts": [
+        {
+          "type": "email",
+          "value": "**redacted**"
+        },
+        {
+          "type": "phone",
+          "value": "**redacted**"
+        }
+      ]
+    },
+    {
+      "name": "Bob",
+      "age": 32,
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "**redacted**"
+        },
+        {
+          "type": "email",
+          "value": "**redacted**"
+        }
+      ]
+    }
+  ]
+}

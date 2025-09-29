@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: Lazy Lagoon API
+  version: 1.0.0
+  description: Transform/truncate CSV, JSON, JSONL, SQL with optional webhooks.
+servers:
+  - url: /lazy-lagoon
+paths:
+  /truncate:
+    post:
+      summary: Truncate a file
+      description: Truncates CSV/JSONL/SQL input (e.g., first 50 rows) and stores to output; returns preview content.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestBodyTruncate'
+      responses:
+        '202':
+          description: Accepted; preview returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  previewContent:
+                    type: string
+        '400': { description: Validation error }
+        '500': { description: Internal error }
+
+  /transform:
+    post:
+      summary: Transform a file
+      description: Executes rules for CSV/JSON/JSONL. If webhook provided, posts status. Returns preview and extracted attribute paths.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestBodyTransform'
+      responses:
+        '200':
+          description: Transformation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  previewContent:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      paths:
+                        type: array
+                        items: { type: string }
+        '400': { description: Validation error }
+        '500': { description: Internal error }
+
+  /healthz/ready:
+    get:
+      summary: Readiness
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ok
+
+components:
+  schemas:
+    SourceReference:
+      type: object
+      properties:
+        id: { type: string }
+        bucket: { type: string }
+        prefix: { type: string }
+        region: { type: string }
+        host: { type: string }
+        server: { type: string }
+        ssl: { type: boolean }
+        database: { type: string }
+        table: { type: string }
+        query: { type: string }
+    Secrets:
+      type: object
+      properties:
+        secret: { type: string }
+        password: { type: string }
+        apiBearerToken: { type: string }
+        accessToken: { type: string }
+    Resources:
+      type: object
+      properties:
+        id: { type: string }
+        username: { type: string }
+    SourceCredential:
+      type: object
+      properties:
+        secrets: { $ref: '#/components/schemas/Secrets' }
+        resources: { $ref: '#/components/schemas/Resources' }
+      required: [secrets, resources]
+    Input:
+      type: object
+      properties:
+        storageType: { type: string }
+        dataType: { type: string, enum: [CSV, JSON, JSONL, SQL] }
+        reference: { $ref: '#/components/schemas/SourceReference' }
+        credential: { $ref: '#/components/schemas/SourceCredential' }
+      required: [storageType, dataType, reference, credential]
+    Output:
+      type: object
+      properties:
+        storageType: { type: string }
+        dataType: { type: string, enum: [CSV, JSON, JSONL, SQL] }
+        reference: { $ref: '#/components/schemas/SourceReference' }
+        credential: { $ref: '#/components/schemas/SourceCredential' }
+      required: [storageType, dataType, reference, credential]
+    WebhookPayload:
+      type: object
+      properties:
+        msg: { type: string }
+        browserTabID: { type: string }
+        uuid: { type: string }
+        userId: { type: string }
+        s3Bucket: { type: string }
+        s3Key: { type: string }
+        sourceId: { type: string }
+        status: { type: string, enum: [SUCCESS, ERROR] }
+      required: [msg, uuid, userId, s3Bucket, s3Key, sourceId, status]
+    Webhook:
+      type: object
+      properties:
+        url: { type: string }
+        responseToken: { type: string }
+        payload: { $ref: '#/components/schemas/WebhookPayload' }
+      required: [url, responseToken, payload]
+    Action:
+      type: object
+      properties:
+        actionType: { type: string }
+        fieldName: { type: string }
+    ExpressionsNode:
+      type: object
+      properties:
+        fieldName: { type: string }
+        operator: { type: string }
+        value: {}
+    Expression:
+      type: object
+      properties:
+        logicalOperator: { type: string }
+        expressions:
+          type: array
+          items: { $ref: '#/components/schemas/ExpressionsNode' }
+    Rule:
+      type: object
+      properties:
+        expression: { $ref: '#/components/schemas/Expression' }
+        actions:
+          type: array
+          items: { $ref: '#/components/schemas/Action' }
+    RequestBodyTruncate:
+      type: object
+      properties:
+        input: { $ref: '#/components/schemas/Input' }
+        output: { $ref: '#/components/schemas/Output' }
+      required: [input, output]
+    RequestBodyTransform:
+      type: object
+      properties:
+        input: { $ref: '#/components/schemas/Input' }
+        output:
+          anyOf:
+            - $ref: '#/components/schemas/Output'
+            - type: 'null'
+        rules:
+          type: array
+          items: { $ref: '#/components/schemas/Rule' }
+        webhook:
+          anyOf:
+            - $ref: '#/components/schemas/Webhook'
+            - type: 'null'
+      required: [input, rules]
+
+
